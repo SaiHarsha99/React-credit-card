@@ -1,148 +1,216 @@
 import React from "react";
-import Card from "react-credit-cards";
-import styles from "./styles.css";
-import {
-  formatCreditCardNumber,
-  formatCVC,
-  formatExpirationDate,
-  formatFormData
-} from "./utils";
+import "./styles.scss";
 
-import "react-credit-cards/es/styles-compiled.css";
+export default class HelloUser extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "xxxxx xxx",
+      number: "0000000000000000",
+      month: "xx",
+      day: "xx",
+      ccv: "CCV"
+    };
+  }
 
-export default class App extends React.Component {
-  state = {
-    number: "",
-    name: "",
-    expiry: "",
-    cvc: "",
-    issuer: "",
-    focused: "",
-    formData: null
-  };
-
-  handleCallback = ({ issuer }, isValid) => {
-    if (isValid) {
-      this.setState({ issuer });
-    }
-  };
-
-  handleInputFocus = ({ target }) => {
+  //Name of Card Owner
+  nameChange(n) {
     this.setState({
-      focused: target.name
+      name: n.target.value
     });
-  };
-
-  handleInputChange = ({ target }) => {
-    if (target.name === "number") {
-      target.value = formatCreditCardNumber(target.value);
-    } else if (target.name === "expiry") {
-      target.value = formatExpirationDate(target.value);
-    } else if (target.name === "cvc") {
-      target.value = formatCVC(target.value);
-    }
-
-    this.setState({ [target.name]: target.value });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    const { issuer } = this.state;
-    const formData = [...e.target.elements]
-      .filter(d => d.name)
-      .reduce((acc, d) => {
-        acc[d.name] = d.value;
-        return acc;
-      }, {});
-
-    this.setState({ formData });
-    this.form.reset();
-  };
+  }
+  //Card Number
+  numberChange(c) {
+    this.setState({
+      number: c.target.value
+    });
+  }
+  //Expiration
+  monthChange(m) {
+    this.setState({
+      month: m.target.value
+    });
+  }
+  dayChange(d) {
+    this.setState({
+      day: d.target.value
+    });
+  }
+  //CCV
+  ccvChange(v) {
+    this.setState({
+      ccv: v.target.value
+    });
+  }
 
   render() {
-    const { name, number, expiry, cvc, focused, issuer, formData } = this.state;
+    return React.createElement(
+      "div",
+      null,
+      React.createElement(
+        "div",
+        { className: "row" },
+        React.createElement(
+          "div",
+          { className: "small-5 small-offset-1 columns " },
+          React.createElement(
+            "div",
+            { className: "callout credit" },
+            React.createElement(
+              "div",
+              { className: "row" },
+              React.createElement(
+                "div",
+                { className: "small-6 columns" },
+                React.createElement(
+                  "h1",
+                  { className: "credit__bank" },
+                  "My Bank"
+                )
+              ),
 
-    return (
-      <div key="Payment">
-        <div className="App-payment">
-          <h1>React Credit Cards</h1>
-          <h4>Beautiful credit cards for your payment forms</h4>
-          <Card
-            number={number}
-            name={name}
-            expiry={expiry}
-            cvc={cvc}
-            focused={focused}
-            callback={this.handleCallback}
-          />
-          <form ref={c => (this.form = c)} onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <input
-                type="tel"
-                name="number"
-                className="form-control"
-                placeholder="Card Number"
-                pattern="[\d| ]{16,22}"
-                required
-                onChange={this.handleInputChange}
-                onFocus={this.handleInputFocus}
-              />
-              <small>E.g.: 49..., 51..., 36..., 37...</small>
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                placeholder="Name"
-                required
-                onChange={this.handleInputChange}
-                onFocus={this.handleInputFocus}
-              />
-            </div>
-            <div className="row">
-              <div className="col-6">
-                <input
-                  type="tel"
-                  name="expiry"
-                  className="form-control"
-                  placeholder="Valid Thru"
-                  pattern="\d\d/\d\d"
-                  required
-                  onChange={this.handleInputChange}
-                  onFocus={this.handleInputFocus}
-                />
-              </div>
-              <div className="col-6">
-                <input
-                  type="tel"
-                  name="cvc"
-                  className="form-control"
-                  placeholder="CVC"
-                  pattern="\d{3,4}"
-                  required
-                  onChange={this.handleInputChange}
-                  onFocus={this.handleInputFocus}
-                />
-              </div>
-            </div>
-            <input type="hidden" name="issuer" value={issuer} />
-            <div className="form-actions">
-              <button className="btn btn-primary btn-block">PAY</button>
-            </div>
-          </form>
-          {formData && (
-            <div className="App-highlight">
-              {formatFormData(formData).map((d, i) => (
-                <div key={i}>{d}</div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="App-credits">
-          Made with ❤️ at <a href="https://amaro.com/">AMARO</a>.
-        </div>
-      </div>
+              React.createElement(
+                "div",
+                { className: "small-6 columns" },
+                React.createElement("img", {
+                  className: "credit__mc",
+                  src:
+                    "https://cdn4.iconfinder.com/data/icons/payment-method/160/payment_method_master_card-512.png",
+                  alt: ""
+                })
+              )
+            ),
+
+            React.createElement(
+              "div",
+              { className: "row" },
+              React.createElement(
+                "div",
+                { className: "column" },
+                React.createElement(
+                  "p",
+                  { className: "credit__card-number" },
+                  this.state.number
+                ),
+                React.createElement(
+                  "span",
+                  { className: "credit__ccv" },
+                  this.state.ccv
+                )
+              ),
+
+              React.createElement(
+                "div",
+                { className: "small-9 columns" },
+                React.createElement(
+                  "label",
+                  null,
+                  "Card Holder",
+                  React.createElement(
+                    "p",
+                    { className: "credit__name" },
+                    this.state.name
+                  )
+                )
+              ),
+
+              React.createElement(
+                "div",
+                { className: "small-3 columns" },
+                React.createElement(
+                  "label",
+                  null,
+                  "Expires",
+                  React.createElement(
+                    "p",
+                    { className: "credit__date" },
+                    this.state.month,
+                    " / ",
+                    this.state.day
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        React.createElement(
+          "div",
+          { className: "small-5 columns end" },
+          React.createElement(
+            "div",
+            { className: "callout margin-top50" },
+            React.createElement(
+              "label",
+              null,
+              "NAME",
+              React.createElement("input", {
+                type: "text",
+                onChange: this.nameChange.bind(this)
+              })
+            ),
+
+            React.createElement(
+              "label",
+              null,
+              "NUMBER",
+              React.createElement("input", {
+                type: "text",
+                maxLength: "16",
+                onChange: this.numberChange.bind(this)
+              })
+            ),
+
+            React.createElement(
+              "div",
+              { className: "row" },
+              React.createElement(
+                "label",
+                { className: "column" },
+                "EXPIRATION DATE"
+              ),
+              React.createElement(
+                "div",
+                { className: "small-4 columns" },
+                React.createElement("input", {
+                  type: "text",
+                  maxLength: "2",
+                  onChange: this.monthChange.bind(this)
+                })
+              ),
+
+              React.createElement(
+                "div",
+                { className: "small-4 columns end" },
+                React.createElement("input", {
+                  type: "text",
+                  maxLength: "2",
+                  onChange: this.dayChange.bind(this)
+                })
+              )
+            ),
+
+            React.createElement(
+              "div",
+              { className: "row" },
+              React.createElement(
+                "div",
+                { className: "small-4 column" },
+                React.createElement(
+                  "label",
+                  null,
+                  "CCV",
+                  React.createElement("input", {
+                    type: "text",
+                    maxLength: "3",
+                    onChange: this.ccvChange.bind(this)
+                  })
+                )
+              )
+            )
+          )
+        )
+      )
     );
   }
 }
